@@ -42,7 +42,7 @@ While some level of React and GraphQL is helpful, this workshop requires zero pr
 To get started, we first need to create a new React project using the [Create React App CLI](https://github.com/facebook/create-react-app).
 
 ```bash
-$ npx create-react-app postagram
+$ npx create-react-app postagram --use-npm
 ```
 
 Now change into the new app directory & install AWS Amplify, AWS Amplify UI React, react-router-dom, emotion, & uuid:
