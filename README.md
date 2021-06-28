@@ -52,6 +52,8 @@ $ cd postagram
 $ npm install aws-amplify @emotion/css uuid react-router-dom @aws-amplify/ui-react
 ```
 
+Now push the repository to AWS CodeCommit, GitHub, Bitbucket, or GitLab so we can connect to it from Aws Amplify.
+
 ## Installing the CLI & Initializing a new AWS Amplify Project
 
 ### Installing the CLI
@@ -62,53 +64,48 @@ Next, we'll install the AWS Amplify CLI:
 $ npm install -g @aws-amplify/cli
 ```
 
-Now we need to configure the CLI with our credentials.
-
-> If you'd like to see a video walkthrough of this configuration process, click [here](https://www.youtube.com/watch?v=fWbM5DLh25U).
-
-```sh
-$ amplify configure
-
-- Specify the AWS Region: us-east-1 || us-west-2 || eu-central-1
-- Specify the username of the new IAM user: amplify-cli-user
-> In the AWS Console, click Next: Permissions, Next: Tags, Next: Review, & Create User to create the new IAM user. Then return to the command line & press Enter.
-- Enter the access key of the newly created user:   
-? accessKeyId: (<YOUR_ACCESS_KEY_ID>)  
-? secretAccessKey: (<YOUR_SECRET_ACCESS_KEY>)
-- Profile Name: amplify-cli-user
-```
-
 ### Initializing A New Project
 
-```bash
-$ amplify init
+To get started [visit the Amplify Console](https://console.aws.amazon.com/amplify/home) inside the AWS console. If this is your first time using Amplify, there are two ways to get started – choose ‘Host your web app’ to connect your Git repository. If you already have Amplify projects, select New app > Host web app from the All apps page.
 
-- Enter a name for the project: postagram
-- Enter a name for the environment: dev
-- Choose your default editor: Visual Studio Code (or your default editor)
-- Please choose the type of app that youre building: javascript
-- What javascript framework are you using: react
-- Source Directory Path: src
-- Distribution Directory Path: build
-- Build Command: npm run-script build
-- Start Command: npm run-script start
-- Do you want to use an AWS profile? Y
-- Please choose the profile you want to use: amplify-cli-user
+![AWS Amplify Sandbox create an app backend or host your web app options](images/amplify-sandbox.png)
+
+Once you connect a repository and branch you will be able taken to the build configuration screen. In order to deploy APIs, authentication, and storage, we deploy additional resources in your account. In order to do so, the Amplify Console requires a service role to access resources in your account.
+
+![REPLACEME: AWS Amplify host your web app, configure build settings](images/configure-build-settings.png)
+
+Clicking on ‘Create new role’ will take you to the IAM console. Go ahead and create a new role and then return to the Amplify console and choose the role you created.
+
+![Select your use case - Amplify - Backend Deployment](images/create-role.png)
+
+App build specification
+
+```yaml
+version: 1
+backend:
+  phases:
+    build:
+      commands:
+        - '# Execute Amplify CLI with the helper script'
+        - amplifyPush --simple
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    baseDirectory: build
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
 ```
 
-The Amplify CLI has initialized a new project & you will see a new folder: __amplify__ & a new file called `aws-exports.js` in the __src__ directory. These files hold your project configuration.
-
-To view the status of the amplify project at any time, you can run the Amplify `status` command:
-
-```sh
-$ amplify status
-```
-
-To view the amplify project in the Amplify console at any time, run the `console` command:
-
-```sh
-$ amplify console
-```
+Live package updates - AmplifyCLI:latest
 
 ## Adding an AWS AppSync GraphQL API
 
